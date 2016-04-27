@@ -13,19 +13,19 @@
 //Firmware calls to 2.032.
 
 //! Functions that handles spi flash .. handles semaphore internal
-int (*spiflash_read)(void *dst, long adr, long len) = 0x0802fd83;
-void (*spiflash_write)(void *dst, long adr, long len) =0x0802fe6b;
+int (*md380_spiflash_read)(void *dst, long adr, long len) = 0x0802fd83;
+void (*md380_spiflash_write)(void *dst, long adr, long len) =0x0802fe6b;
 
-int (*spiflash_security_registers_read)(void *dst, long adr, long len) = 0x080301bd;
+int (*md380_spiflash_security_registers_read)(void *dst, long adr, long len) = 0x080301bd;
 
-void (*spiflash_enable)() = 0x0802fe37;
-void (*spiflash_disable)() = 0x0802fe53;
-void (*spiflash_wait)()=0x0802fe15;
+void (*md380_spiflash_enable)() = 0x0802fe37;
+void (*md380_spiflash_disable)() = 0x0802fe53;
+void (*md380_spiflash_wait)()=0x0802fe15;
 
-void (*spiflash_block_erase64k)(uint32_t adr)=0x0802fbb7;
-void (*spiflash_sektor_erase4k)(uint32_t adr)=0x0802fb83;
+void (*md380_spiflash_block_erase64k)(uint32_t adr)=0x0802fbb7;
+void (*md380_spiflash_sektor_erase4k)(uint32_t adr)=0x0802fb83;
 
-INT8U (*spi_sendrecv)(INT8U data) = 0x0802fdc9; // SPI1
+INT8U (*md380_spi_sendrecv)(INT8U data) = 0x0802fdc9; // SPI1
 
 
 
@@ -69,6 +69,7 @@ char* dmr_squelch_mode = 0x2001d35f;
 char** dmr_squelch_firstthing = 0x2001d118;
 
 
+
 //! Handle to the original (unhooked) upload handler.
 int (*usb_upld_handle)(void*, char*, int, int)=0x0808d3d9;
 //! This returns a USB packet to the host from the upload handler.
@@ -93,21 +94,30 @@ void* (*OSTaskNameSet)(INT8U prio, INT8U *pname, INT8U *perr)=0x804bcc1;
 
 
 //! Functions and Variabes regarding the menu
-void    *(*main_menu)(void *)=0x08039c23;
-void    *(*create_main_meny_entry)(void)=0x0800c189;
+void     *(*main_menu)(void *)=0x08039c23;
+void     *(*md380_create_main_meny_entry)(void)=0x0800c189;
+void     *(*md380_menu_numerical_input)(void) = 0x801a2d6;
+void     *(*md380_create_menu_entry)(int a, void *b , void *c, void  *d, int e, int f ,int g)=0x0800c731;
+void     *(*md380_menu_entry_back)(void)=0x800f452;
+void     *(*md380_menu_entry_programradio)(void)=0x80127d0;
 
-void    *(*create_menu_entry)(int a, void *b , void *c, void  *d, int e, int f ,int g)=0x0800c731;
-void    *(*menu_entry_back)(void)=0x800f453;
-void    *(*menu_entry_programradio)(void)=0x80127d1;
-char    *wt_programradio=0x080d175c;
-uint8_t *menu_id=0x2001d3c2;
-uint8_t *menu_depth=0x200011e4;
-uint8_t *menu_entry_selected=0x2001d3b2;
-void    *menu_memory=0x2001c148;
-void    *menu_unknown_02=0x20019df0;
-uint8_t *menu_unkonwn_01=0x2001d3c2;
-
-uint8_t *program_radio_unprohibited=(uint8_t *)(0x2001d030 + 4);
+uint32_t *md380_menu_0x20001114 = 0x20001114;
+uint8_t  *md380_menu_0x200011e4 = 0x200011e4;
+uint8_t  *md380_menu_0x2001d3c1 = 0x2001d3c1;
+uint8_t  *md380_menu_0x2001d3ed = 0x2001d3ed;
+uint8_t  *md380_menu_0x2001d3ee = 0x2001d3ee;
+uint8_t  *md380_menu_0x2001d3ef = 0x2001d3ef;
+uint8_t  *md380_menu_0x2001d3f0 = 0x2001d3f0;
+uint8_t  *md380_menu_0x2001d3f1 = 0x2001d3f1;
+uint8_t  *md380_menu_0x2001d3f4 = 0x2001d3f4;
+uint8_t  *md380_menu_depth = 0x200011e4;
+wchar_t  *md380_menu_edit_buf = 0x2001b716;
+uint8_t  *md380_menu_entry_selected = 0x2001d3b2;
+uint8_t  *md380_menu_id = 0x2001d3c2;
+void     *md380_menu_mem_base = 0x20019df0;
+void     *md380_menu_memory = 0x2001c148;
+uint8_t  *md380_program_radio_unprohibited = (uint8_t *)(0x2001d030 + 4);
+uint8_t  *md380_wt_programradio = 0x080d175c;
 
 
 char* channelnum=0x2001d376;
@@ -143,3 +153,5 @@ uint32_t *beep_process_unkown=0x2001d178;
 void (*md380_itow)(wchar_t *, int value)=0x080172ed;
 void (*md380_RTC_GetDate)(uint32_t RTC_Format, RTC_DateTypeDef *RTC_DateStruct)=0x08026461;
 void (*md380_RTC_GetTime)(uint32_t RTC_Format, RTC_TimeTypeDef* RTC_TimeStruct)=0x0802634b;
+
+uint32_t *md380_dmr_id=0x2001c65c;
