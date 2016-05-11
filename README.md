@@ -71,6 +71,11 @@ This project should work across Linux, Mac OS, and Windows, but has
 not been tested on all platforms.  A separate client, MD380Tool,
 is under development for Android.
 
+###Installation of required packages###
+Debian Stretch:
+
+    apt-get install gcc-arm-none-eabi binutils-arm-none-eabi libusb-1.0 python-usb
+
 ##Convenient Usage:##
 
 Anything with `md380-tool` requires a recent version of our patched
@@ -219,4 +224,10 @@ as a direct replacement, as seen in the Makefile.
 An image with more than two colors requires the "relocate" argument to
 md380-gfx. There are examples of this in the Makefile as well.
 
+## Support ##
 
+To support users by using the md380tools or the resulting patched firmware 
+a Google Group is public opened and reachable via 
+https://groups.google.com/forum/#!forum/md380tools. No extra registration 
+should be necessary. You could also feed it via e-mail at 
+md380tools@googlegroups.com. So feel free to put in your questions into it!
