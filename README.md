@@ -53,7 +53,8 @@ The patched firmware is known to work on the following devices:
 
 * Universal Serial Bus Device Class Specification for Device
   Firmware Upgrade, version 1.1:
-  http://www.usb.org/developers/devclass_docs/DFU_1.1.pdf
+  http://www.usb.org/developers/docs/devclass_docs/DFU_1.1.pdf
+  
 
 
 ##Requirements:##
@@ -75,6 +76,13 @@ is under development for Android.
 Debian Stretch:
 
     apt-get install gcc-arm-none-eabi binutils-arm-none-eabi libusb-1.0 python-usb
+
+Debian Jessie:
+
+    apt-get install gcc-arm-none-eabi binutils-arm-none-eabi libusb-1.0 git make \
+                    curl python-pip unzip
+    pip install pyusb -U # update PyUSB to 1.0
+  
 
 ##Convenient Usage:##
 
