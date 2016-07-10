@@ -19,6 +19,7 @@
 #include "config.h"
 #include "gfx.h"
 #include "addl_config.h"
+#include "os.h"
 
 
 /* Used to avoid duplicate call endings. */
@@ -124,7 +125,7 @@ void *dmr_call_start_hook(char *pkt){
 }
 
 
-void dmr_apply_squelch_hook(char *firstthing, char *mode){
+void dmr_apply_squelch_hook(OS_EVENT *event, char * mode){
   /* The *mode byte is 0x09 for an unmuted call and 0x08 for a muted
      call.
   */
@@ -135,12 +136,22 @@ void dmr_apply_squelch_hook(char *firstthing, char *mode){
   if(*mode==0x08 && global_addl_config.promtg==1){
     printf("Applying monitor mode to a public call.\n");
     *mode=0x09;
+    
+    /* I'm not quite sure what this function does, but it must be
+       called before dmr_apply_squelch() if the squelch mode is being
+       changed. --Travis
+     */
     dmr_before_squelch();
   }
-  dmr_apply_squelch(firstthing,mode);
+  
+  /* This is really OSMboxPost().  We should probably change up these
+     names now that we're figuring out what the functions really
+     do. --Travis
+   */
+  md380_OSMboxPost(event, mode);
 }
 
-void dmr_apply_privsquelch_hook(char *firstthing, char *mode){
+void dmr_apply_privsquelch_hook(OS_EVENT *event, char *mode){
   /* The *mode byte is 0x09 for an unmuted call and 0x08 for a muted
      call.
   */
@@ -153,7 +164,7 @@ void dmr_apply_privsquelch_hook(char *firstthing, char *mode){
     *mode=0x09;
     dmr_before_squelch();
   }
-  dmr_apply_squelch(firstthing,mode);
+  md380_OSMboxPost(event, mode);
 }
 
 

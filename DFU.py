@@ -89,9 +89,20 @@ class DFU(object):
         self._device = device
 
     def detach(self):
+        """Detaches from the DFU target."""
         self._device.ctrl_transfer(0x21, Request.DETACH, 0, 0, None)
-    
+    def get_string(self,i=0):
+        """Gets a USB descriptor string, to distinguish firmware types."""
+        import usb;
 
+        #Linux and Mac have different calling conventions for usb.util.get_string(),
+        #so we'll try each of them and hope for the best.
+        try:
+            #Mac calling convention.
+            return usb.util.get_string(self._device,255,i,None);
+        except:
+            #Linux calling convention.
+            return usb.util.get_string(self._device,i,None);
     def bcd(self,b):
         """Converts a byte from BCD to integer."""
         return int("%02x"%b);

@@ -100,12 +100,52 @@ const char* getmotorolabasickey(int i){
   }
 }
 
+/* This hook intercepts calls to an initial AES check at startup that
+   might (or might not) be related to the ALPU-MP chip.
+*/
+void aes_startup_check_hook(){
+  printf("Performing AES startup check.\n");
+  //Call back to the original function.
+  int *toret=aes_startup_check();
+  
+  
+  /* aes_startup_check() will set the byte at 0x2001d39b to 0x42,
+     which is then checked repeatedly elsewhere in the code, causing
+     mysterious things to fail.  If we find that this check has failed,
+     let's force it back the other way and hope for the best.
+  */
+  if(*((char*)0x2001d39b)!=0x42){
+    printf("Startup AES check failed.  Attempting to forge the results.\n");
+    printf("*0x2001d39b = 0x%02x\n", *((char*)0x2001d39b));
+    
+    //Force the correct value.
+    *((char*)0x2001d39b)=0x42;
+  }
+}
+
+/* This hook intercepts calls to aes_loadkey(), so that AES keys can
+   be printed to the dmesg log.
+*/
+char *aes_loadkey_hook(char *key){
+  //Print the key that we are to load.
+  printf("aes_loadkey (0x%08x): ",key);
+  printhex(key,16);
+  printf("\n");
+  
+  key=aes_loadkey(key);
+  return key;
+}
+
 /* This hook intercepts calls to aes_cipher(), which is used to turn
    the 128-bit Enhanced Privacy Key into a 49-bit sequence that gets
    XORed with the audio before transmission and after reception.
    
    By changing the output to match Motorola's Basic Privacy, we can
    patch the MD380 to be compatible with a Motorola network.
+   
+   The function is also used for two startup checks, presumably
+   related to the ALPU-MP copy protection chip.  If those checks are
+   interfered with, the radio will boot to a blank white screen.
  */
 char *aes_cipher_hook(char *pkt){
   char *res;

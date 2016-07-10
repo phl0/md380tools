@@ -21,8 +21,8 @@ void gfx_drawtext(wchar_t *str,          //16-bit, little endian.
 		  short x, short y,   //X and Y position
 		  int maxlen);
 void gfx_drawbmp(char *bmp,
-		 int idx,
-		 uint64_t pos);
+		 int x,
+		 int y);
 
 void gfx_drawtext2(wchar_t *str,    //16-bit, little endian.
                    int x, int y,   //X and Y position
@@ -49,8 +49,6 @@ void* dmr_handle_data(void *pkt, int len);
 //! Function that handles an incoming SMS.
 void* dmr_sms_arrive(void *pkt);
 
-//! Function that applies a squelch.
-void dmr_apply_squelch(char *dmr_squelch_firsthing, int dmr_squelch_mode);
 //! Called before unsquelching.
 int dmr_before_squelch();
 

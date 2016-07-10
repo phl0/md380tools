@@ -17,8 +17,6 @@ dmr_call_start                         = 0x0803ec87;
 dmr_handle_data                        = 0x0804b66d;
 /* Function that handles an incoming SMS. */
 dmr_sms_arrive                         = 0x0803f03d;
-/* //! Function that applies a squelch. */
-dmr_apply_squelch                      = 0x080303b5;
 /* //! Called before unsquelching. */
 dmr_before_squelch                     = 0x0803ef6d;
 
@@ -89,7 +87,9 @@ c5000_spi0_readreg = 0x0803e2f5;
 c5000_spi0_writereg = 0x0803e2a9;
 
 /* aes */
+aes_loadkey = 0x08035739;
 aes_cipher = 0x080356b1;
+aes_startup_check = 0x0802168d;
 
 /* Unknown AMBE2+ thing. */
 ambe_encode_thing = 0x08050d91;

@@ -214,6 +214,13 @@ if __name__== '__main__':
     # skip ..."unused code"
     merger.hookstub(0x0800d8c8+4,0x0800d92e+1);
     
+    # Hook the startup AES check.
+    merger.hookbl(0x0804534c, sapplet.getadr("aes_startup_check_hook"),0);
+    
+    # Patch a single call in the wrapper function so catch all
+    # aes_loadkey() calls.
+    merger.hookbl(0x080356aa,sapplet.getadr("aes_loadkey_hook"),0);
+    
     #Function that calls aes_cipher() twice.  When are these called?
     merger.hookbl(0x0802177c,sapplet.getadr("aes_cipher_hook"),0);
     merger.hookbl(0x0802182c,sapplet.getadr("aes_cipher_hook"),0);
@@ -258,6 +265,19 @@ if __name__== '__main__':
     #Hooks the squelch routines, so we can do monitor mode in C.
     merger.hookbl(0x0803ef64, sapplet.getadr("dmr_apply_privsquelch_hook"),0); #Private calls.
     merger.hookbl(0x0803eea0, sapplet.getadr("dmr_apply_squelch_hook"),0);     #Public calls.
+
+    # print_ant_sym_hook (shows eye on status line when promiscus mode is active)
+    print_ant_sym_hook_list=[
+       0x0802047c,
+       0x0802048a,
+       0x080208b0,
+       0x080208bc,
+       0x080328de,
+       0x08032932,
+       0x0803297a
+    ];
+    for adr in print_ant_sym_hook_list:
+        merger.hookbl(adr,sapplet.getadr("print_ant_sym_hook"));
 
     # init the addl global config struct from spi flash
     merger.hookbl(0x080440a6,sapplet.getadr("init_global_addl_config_hook"),0);
