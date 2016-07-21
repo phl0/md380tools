@@ -67,21 +67,6 @@ static void do_jump(uint32_t stacktop, uint32_t entrypoint)
 }
 
 
-static void led_setup(void) {
-  /* GPIOD Periph clock enable */
-  RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOE, ENABLE);
-
-  /* PE 0 and 1 to in/out mode */
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1;
-  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_100MHz;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
-  GPIO_Init(GPIOE, &GPIO_InitStructure);
-  
-}
-
-
 
 /* This copies a character string into a USB Descriptor string, which
    is a UTF16 little-endian string preceeded by a one-byte length and
@@ -134,6 +119,7 @@ void wstrhex(wchar_t *string, long value){
 /* Displays a startup demo on the device's screen, including some of
    the setting information and a picture or two. */
 void demo(){
+#ifdef CONFIG_GRAPHICS
   drawtext(L"MD380Tools ",
 	   160,20);
   drawtext(L"by KK4VCZ  ",
@@ -148,7 +134,8 @@ void demo(){
     gfx_drawbmp(welcomebmp,0,i);
     sleep(30);
   }
-  
+#endif //CONFIG_GRAPHICS
+
   //Restore the bottom line of text before we return.
   md380_spiflash_read(botlinetext, 0x2054, 20);
 }
@@ -166,16 +153,14 @@ void demo(){
 */
 int main(void) {
   dmesg_init();
-  led_setup();
-
+  
+  /*
   RTC_TimeTypeDef RTC_TimeTypeTime;
   md380_RTC_GetTime(RTC_Format_BIN, &RTC_TimeTypeTime);
   printf("%d:%d:%d\n", RTC_TimeTypeTime.RTC_Hours,
                        RTC_TimeTypeTime.RTC_Minutes,
                        RTC_TimeTypeTime.RTC_Seconds);
-
-  printf("Channel %d selected.\n",
-	 read_channel_switch());
+  */
      
   //Done with the blinking, so start the radio application.
   printf("Starting main()\n");

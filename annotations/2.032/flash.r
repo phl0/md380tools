@@ -7,7 +7,7 @@
 
 
 # Begin by opening the application in R2 with this script.
-# r2 -a arm -m 0x0800C000 -b 16 -i flash.r ../../firmware/D002.032.bin
+# radare2 -a arm -m 0x0800C000 -b 16 -i flash.r ../../firmware/D002.032.bin
 
 # MD5 (../../firmware/D002.032.bin) = 8295594d00cb705eac7cd812642fccf2
 
@@ -119,7 +119,7 @@ af+ 0x800d518 320 F_4141
 af+ 0x800d66c 178 F_4139
 af+ 0x800d730 2 F_4147
 af+ 0x800d732 188 F_4283
-af+ 0x800d7f4 114 F_4038
+af+ 0x800d7f4 114 Clear_Display
 af+ 0x800d86c 30 F_4039_something_write_to_screen
 af+ 0x800d88a 36 gfx_drawtext
 af+ 0x800d8ae 254 F_785_Print_Date_and_Time
@@ -290,7 +290,7 @@ af+ 0x8016dcc 152 Create_Menu_Entry_VOX
 CCa 0x8016e60 ConfigData + 0x17 (Byte) F_5080
 af+ 0x8016f90 146 F_5081
 CCa 0x8017006 Set ConfigData + 0xb (Byte) F_5081
-af+ 0x8017028 180 Create_Menu_Entry_RadioSettings
+af+ 0x8017028 180 Create_Menu_Entry_RadioSettingsDateTime
 CCa 0x8017070 0x80171e8 Edit_Time_Back
 CCa 0x8017074 0x80170f0 Edit_Time
 CCa 0x8017082 ... Time
@@ -325,7 +325,7 @@ CCa 0x801744c 0x80174fc Edit_Time_Confirm
 CCa 0x8017450 ... 0.1.:.2.8.:.0.0
 af+ 0x8017470 134 Create_Menu_Entry_QuickText
 CCa 0x80174e8 Q.u.i.c.k...T.e.x.t
-af+ 0x80174fc Edit_Time_Confirm
+af+ 0x80174fc 104 Edit_Time_Confirm
 CCa 0x8017544 0x80175dc Edit_Time5_SetToRTC 
 CCa 0x8017548 Back
 af+ 0x80175dc 54 Edit_Time5_SetToRTC
@@ -656,7 +656,7 @@ af+ 0x8020a58 3020 F_28
 af+ 0x8021624 48 F_30
 af+ 0x8021654 30 F_31
 af+ 0x8021672 26 F_32
-af+ 0x802168c 484 F_803
+af+ 0x802168c 484 aes_startup_check
 af+ 0x8021870 18 F_804
 af+ 0x8021882 18 Get_Welcome_Line1_from_spi_flash
 af+ 0x8021894 18 Get_Welcome_Line2_from_spi_flash
@@ -1071,7 +1071,7 @@ af+ 0x802e988 92 F_4385
 af+ 0x802e9f0 54 F_824
 af+ 0x802ea44 202 F_4386
 af+ 0x802eb68 212 F_4444
-af+ 0x802ec54 Create_Menu_Entry_Inbox
+af+ 0x802ec54 504 Create_Menu_Entry_Inbox
 af+ 0x802f9bc 172 F_4138
 af+ 0x802fb00 130 F_300
 af+ 0x802fb82 52 spiflash_sektor_erase4k
@@ -1230,7 +1230,8 @@ CCa 0x803292a Ant symbol
 CCa 0x8032950 clear ant_signal
 CCa 0x8032972 Ant symbol
 af+ 0x80329c0 104 OSTimeDly
-af+ 0x8032a3c 146 Function_Function_Function_Function_Called_Big_I2C_Function
+af+ 0x8032a3c 146 licence_check
+CCa 0x8032a5e 2 PWR_FLAG_SB: StandBy flag This flag indicates that the system was resumed from StandBy mode
 af+ 0x8032ace 28 F_337
 af+ 0x8032aea 10 F_114
 af+ 0x8032af4 24 F_115
@@ -1274,7 +1275,7 @@ af+ 0x803568c 8 F_350
 af+ 0x8035694 10 F_351
 af+ 0x80356a8 8 F_352
 af+ 0x80356b0 136 aes_cipher
-af+ 0x8035738 236 F_354
+af+ 0x8035738 236 aes_loadkey
 af+ 0x8035824 92 F_844
 af+ 0x8035880 42 F_355
 af+ 0x80358aa 68 F_356
@@ -1637,7 +1638,7 @@ af+ 0x804262c 28 F_4508
 af+ 0x804264c 28 F_4509
 af+ 0x8042668 34 F_4338
 af+ 0x804268a 30 F_4468
-af+ 0x80426a8 30 F_4043
+af+ 0x80426a8 30 Reboot_Radio
 af+ 0x80426c8 536 Init_ADC
 CCa 0x80426f4 Bat_Voltage
 af+ 0x80428e0 332 F_455
@@ -1684,7 +1685,9 @@ af+ 0x8043dd0 80 F_471
 CCa 0x8043df8 Bat_Voltage
 af+ 0x8043e28 64 F_163
 af+ 0x8043e70 8 F_164
-af+ 0x8043e78 268 F_4000
+af+ 0x8043e78 268 Powering_Down
+CCa 0x8043f32 P.o.w.e.r.i.n.g.
+CCa 0x8043f4e D.o.w.n.
 af+ 0x804403c 310 Start
 CCa 0x804408a ConfigData + 0x1  (byte) Start
 af+ 0x8044172 298 F_474
@@ -1717,7 +1720,7 @@ CCa 0x804465e F_4170 display?
 CCa 0x8044662 F_4225 vip
 CCa 0x8044666 F_4505
 CCa 0x804466a F_4501
-CCa 0x804466e F_626
+CCa 0x804466e dog_feeding
 af+ 0x8044674 626 FMTx_Process
 CCa 0x80447a4 ConfigData + 0x1  (byte) FMTx_Process
 CCa 0x80447b0 ConfigData + 0x1  (byte) FMTx_Process
@@ -1791,17 +1794,17 @@ af+ 0x804690c 22 Not_Big_I2C_Function33
 af+ 0x8046914 14 F_506
 af+ 0x8046922 38 F_507
 af+ 0x8046948 38 F_508
-af+ 0x804696e 186 Not_Big_I2C_Function3
-af+ 0x8046a28 306 Big_I2C_Function
-af+ 0x8046b5a 236 Verry_Big_Function_with_I2C1
+af+ 0x804696e 186 alpu_transfer_init
+af+ 0x8046a28 306 alpu_transfer_read
+af+ 0x8046b5a 236 alpu_transfer_write
 af+ 0x8046c94 2 F_177_Nice
 af+ 0x8046c98 8 F_1024
 af+ 0x8046ca0 22 PWR_GetFlagStatus
 af+ 0x8046cb6 14 Function_PWR_CR__
-af+ 0x8046cd0 232 F_515
-af+ 0x8046db8 10 F_516
-af+ 0x8046dc2 62 F_179
-af+ 0x8046e00 156 Function_Function_Function_Called_Big_I2C_Function
+af+ 0x8046cd0 232 Delay
+af+ 0x8046db8 10 Delay_char
+af+ 0x8046dc2 62 maybe_get_random_from_rtc
+af+ 0x8046e00 156 alpu_check_licence
 af+ 0x8046eb0 2 F_180_Nice
 af+ 0x8046eb4 8 F_520
 af+ 0x8046ebc 8 F_521
@@ -1839,7 +1842,7 @@ af+ 0x8047b0c 2 F_187_Nice
 af+ 0x8047b10 182 F_188
 af+ 0x8047c64 2 F_189_Nice
 af+ 0x8047c68 16 F_555
-af+ 0x8047c7c 734 F_191
+af+ 0x8047c7c 734 Start_2_more_tasks__init_vocoder_tasks__Q
 af+ 0x8047f5c 1700 F_4524
 af+ 0x8048600 312 F_4525
 af+ 0x8048738 104 F_4526
@@ -2051,19 +2054,21 @@ af+ 0x804fc66 6 F_5054
 af+ 0x804fc6c 52 F_5053
 af+ 0x804fca0 6 F_5072
 af+ 0x804fca6 6 F_5073
-af+ 0x804fcb0 234 I2C1_Function_1
-af+ 0x804fda8 28 I2C1_Function_2
-af+ 0x804fdc4 28 I2C1_Function_3
-af+ 0x804fde0 28 I2C1_Function_4
-af+ 0x804fdfc 22 I2C1_Function_5
-af+ 0x804fe12 6 I2C1_Function_6
-af+ 0x804fe18 6 I2C1_Function_7
-af+ 0x804fe1e 52 I2C1_Function_8
-af+ 0x804fe52 66 I2C1_Function_9
+af+ 0x804fcb0 234 I2C_Init
+af+ 0x804fda8 28 I2C_Cmd
+af+ 0x804fdc4 28 I2C_GenerateSTART
+af+ 0x804fde0 28 I2C_GenerateSTOP
+af+ 0x804fdfc 22 I2C_Send7bitAddress
+af+ 0x804fe12 6 I2C_SendData
+af+ 0x804fe18 6 I2C_ReceiveData
+af+ 0x804fe1e 52 I2C_GetLastEvent
+af+ 0x804fe52 66 I2C1_CheckEvent
 af+ 0x804fe94 212 F_653
-af+ 0x804ff74 244 Function_Called_Big_I2C_Function
+af+ 0x804ff74 244 alpu_xor
 af+ 0x8050068 270 Function_Function_Called_Big_I2C_Function
-af+ 0x8050176 2632 F_656
+af+ 0x8050176 2632 alpu_compare_cpu_crypt_vs_alpu_crypt
+CCa 0x805017a first_8byte_seed_then_10byte_from_alpu
+CCa 0x805023e secret
 af+ 0x8050bcc 102 F_238
 af+ 0x8050c40 2 F_239_Nice
 af+ 0x8050c44 328 F_4522

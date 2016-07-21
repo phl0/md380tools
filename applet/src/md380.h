@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdint.h>
 
+#include "config.h"
 #include "os.h"
 #include "peripherals/stm32f4xx_rtc.h"
 
@@ -54,16 +55,16 @@ int dmr_before_squelch();
 
 
 //! Determines the squelching of an incoming call.
-extern char* const  dmr_squelch_mode;
+extern char dmr_squelch_mode[];
 //! Unknown function involved in squelching.
-extern char** const dmr_squelch_firstthing;
+extern char* const dmr_squelch_firstthing[];
 
 
 //Pointer to the buffer that stores the bottom line of screen text.
-char * const botlinetext;
+extern char botlinetext[];
 
 //ROM copy of the welcome bitmap.
-extern char * const welcomebmp;
+extern char welcomebmp[];
 
 // md380 usb
 
@@ -73,7 +74,8 @@ int usb_upld_handle(void*, char*, int, int);
 int usb_send_packet(void*, char*, uint16_t);
 
 int usb_dnld_handle();
-extern int * const dnld_tohook;
+
+extern int dnld_tohook[];
 
 
 // md380_spiflash
@@ -86,6 +88,13 @@ void    md380_spiflash_enable();
 void    md380_spiflash_disable();
 void    md380_spiflash_wait();
 uint8_t md380_spi_sendrecv(INT8U data); // SPI1
+
+// md380_i2c // stolen from ../../lib/src/peripherals/stm32f4xx_i2c.c
+void	md380_I2C_GenerateSTART(I2C_TypeDef* I2Cx, FunctionalState NewState);
+void	md380_I2C_GenerateSTOP(I2C_TypeDef* I2Cx, FunctionalState NewState);
+uint8_t	md380_I2C_ReceiveData(I2C_TypeDef* I2Cx);
+void	md380_I2C_Send7bitAddress(I2C_TypeDef* I2Cx, uint8_t Address, uint8_t I2C_Direction);
+void 	md380_I2C_SendData(I2C_TypeDef* I2Cx, uint8_t Data);
 
 
 //! Function that handles uC/OS-II settings
@@ -106,6 +115,9 @@ int         OS_ENTER_CRITICAL();
 //! Resumes threads.
 void        OS_EXIT_CRITICAL(int);
 
+
+extern OS_EVENT * OSSemCreate_hook0_event_mem[];
+extern OS_EVENT * OSSemCreate_hook1_event_mem[];
 
 
 //! Functions and Variabes regarding the menu
@@ -135,19 +147,19 @@ uint8_t   md380_menu_depth;
 uint8_t   md380_menu_entry_selected;
 uint8_t   md380_menu_id;
 
-wchar_t	  md380_wt_programradio[1];  // menutext <- menu_entry_programradio
+extern wchar_t	  	md380_wt_programradio[];  // menutext <- menu_entry_programradio
 
-extern void     	* const md380_menu_mem_base;
-extern void     	* const md380_menu_memory;
-extern wchar_t  	* const md380_menu_edit_buf;
+extern uint8_t     	md380_menu_mem_base[];
+extern uint8_t     	md380_menu_memory[];
+extern wchar_t  	md380_menu_edit_buf[];
 
 uint32_t  md380_menu_0x20001114;
 
 //! program_radio_unprohibited (menu entry) ... bulding site is an struct
-uint8_t md380_program_radio_unprohibited;
+extern uint8_t md380_program_radio_unprohibited[];
 
 //! This points to the byte of the current channel.
-extern char* const  channelnum;
+extern char  channelnum[];
 
 //! Reads the current channel number from the rotary switch.
 int read_channel_switch();
@@ -160,6 +172,8 @@ void c5000_spi0_writereg(int reg, int val);
 
 
 // md380 aes
+int * aes_startup_check(void);
+char * aes_loadkey(char *);
 
 //! Unknown AES function.
 char* aes_cipher(char *pkt);
@@ -176,25 +190,37 @@ int ambe_decode_wav(int *a1, signed int eighty, char *bitbuffer,
 		    int a4, short a5, short a6, int a7);
 
 
+void Write_Command_2display(uint8_t data);
+void Write_Data_2display(uint8_t data);
+
 //! Functions and Variabes regarding the beep_
 // not yet known ;)
-extern uint32_t * const beep_process_unkown;
+extern uint32_t  beep_process_unkown[];
 
 //! useful firmware functions
 wchar_t * md380_itow(wchar_t *, int value);
 void      md380_RTC_GetDate(uint32_t RTC_Format, RTC_DateTypeDef *RTC_DateStruct);
 void      md380_RTC_GetTime(uint32_t RTC_Format, RTC_TimeTypeDef* RTC_TimeStruct);
 
-uint32_t md380_dmr_id;
+extern uint8_t  md380_radio_config[]; // needs more documentation 
+                                      // +4 (uint32) own DMR ID
+
+// stuff to handle different display (flip (380/390) type
+extern uint8_t  const md380_radio_config_bank2[]; // from spiflash Security Registers
+                                                  // tunig parameter
+void md380_copy_spiflash_security_bank2_to_ram(void);
+
+// rtc_timer process stuff ( user interface task)
+// menu no exit ....
+extern uint8_t md380_f_4225_operatingmode[];
+extern uint8_t md380_f_4225_operatingmode_menu;
+extern uint8_t md380_f_4225_operatingmode_menu_exit;
+
 
 // debug and training stuff
-
 void md380_f_4137();
 void md380_f_4520();
 void md380_f_4098();
 void md380_f_4102();
 void md380_f_4225();
 
-extern uint8_t * const md380_f_4225_operatingmode;
-extern const uint8_t md380_f_4225_operatingmode_menu;
-extern const uint8_t md380_f_4225_operatingmode_menu_exit;

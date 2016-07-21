@@ -1,4 +1,10 @@
-#! python2
+#! python2.7
+
+
+# This script implements our old methods for merging an MD380 firmware
+# image with its patches.  It is presently being rewritten to require
+# fewer explicit addresses, so that we can target our patches to more
+# than one version of the MD380 firmware.
 
 import sys;
 
@@ -204,6 +210,11 @@ if __name__== '__main__':
     merger.hookbl(0x080441f4,sapplet.getadr("OSSemCreate_hook"),0);
     merger.hookstub(0x080441f4+4,0x0804420c+1);
 
+    # display hooks
+    ## display flip workaround see issue #178 not necessary on 0X3.020
+    merger.hookbl(0x08031fde,sapplet.getadr("display_init_hook_1"),0);
+    merger.hookbl(0x0803200e,sapplet.getadr("display_init_hook_2"),0);
+
     # gfx hooks
     merger.hookbl(0x0802e4b0,sapplet.getadr("rx_screen_green_hook"),0);
     merger.hookbl(0x0802e582,sapplet.getadr("rx_screen_green_hook"),0);
@@ -304,6 +315,31 @@ if __name__== '__main__':
     for adr in beep_process_list:
         merger.hookbl(adr,sapplet.getadr("F_294_replacement"),0);
 
+######### i2c hooks
+    I2C_GenerateSTART_hook_list=[
+    0x8046a3a, 0x8046ac6, 0x8046b6c];
+    for adr in I2C_GenerateSTART_hook_list:
+        merger.hookbl(adr,sapplet.getadr("I2C_GenerateSTART_hook"),0);
+        
+    I2C_GenerateSTOP_hook_list=[
+    0x8046b50, 0x8046c3c];
+    for adr in I2C_GenerateSTOP_hook_list:
+        merger.hookbl(adr,sapplet.getadr("I2C_GenerateSTOP_hook"),0);
+    
+    I2C_ReceiveData_hook_list=[
+    0x8046b1c];
+    for adr in I2C_ReceiveData_hook_list:
+        merger.hookbl(adr,sapplet.getadr("I2C_ReceiveData_hook"),0);
+        
+    I2C_Send7bitAddress_hook_list=[
+    0x8046a66, 0x8046af2, 0x8046b98];
+    for adr in I2C_Send7bitAddress_hook_list:    
+        merger.hookbl(adr,sapplet.getadr("I2C_Send7bitAddress_hook"),0);
+        
+    I2C_SendData_hook_list=[
+    0x8046a90, 0x8046bc2, 0x8046c06];
+    for adr in I2C_SendData_hook_list:
+        merger.hookbl(adr,sapplet.getadr("I2C_SendData_hook"),0);
 
 ##########  Debug and training hooks
     Create_MenuEntrylist=[
